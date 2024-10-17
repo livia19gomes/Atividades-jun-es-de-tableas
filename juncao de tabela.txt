@@ -1,0 +1,103 @@
+/*ATIVIDADE*/
+
+/*1- Selecione a quantidade total de medicamentos em estoque.*/	
+SELECT SUM(ESTOQUE) AS TOTAL_ESTOQUE
+FROM MEDICAMENTOS 
+
+/*2 - Selecione a média de idade dos tutores.
+Obs : Não quero ano fixo. Ex: 2024 e sim que pegue o ano atual do servidor.*/
+SELECT AVG(EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM t.data_nascimento)) AS media_idade
+FROM tutor t
+
+/*3 - Selecione o menor valor unitário entre os medicamentos.*/
+SELECT MIN(UNIDADE) 
+FROM MEDICAMENTOS m 
+
+/*4 - Selecione o maior peso entre os pacientes.*/
+SELECT MAX(PESO)
+FROM PACIENTE p 
+
+/*5 - Selecione o número total de tutores na base de dados.*/
+SELECT COUNT(*) 
+FROM tutor t 
+
+/*6 - Selecione o valor total em estoque de medicamentos para cada unidade.*/
+SELECT SUM(ESTOQUE * PRECO) 
+FROM medicamentos
+GROUP BY UNIDADE 
+
+/*7 - Selecione o ID da receita e a soma total dos valores individuais dos itens 
+ da receita para cada receita com um valor total superior a 100.*/
+
+/**/
+
+LEFT JOIN /**/
+INNER JOIN
+
+SELECT * FROM PACIENTE p 
+LEFT JOIN TUTOR t ON T.ID_TUTOR = P.ID_TUTOR 
+
+SELECT * FROM PACIENTE p 
+INNER JOIN TUTOR t ON T.ID_TUTOR = P.ID_TUTOR 
+WHERE P.ID_TUTOR = 3
+
+SELECT P.*, T.NOME 
+FROM PACIENTE p 
+INNER JOIN TUTOR t ON T.ID_TUTOR = P.ID_TUTOR 
+WHERE ID_TUTOR = 3
+
+/*Atividade*/
+
+/*1 - Selecione todos os pacientes juntamente com os detalhes dos
+seus tutores, incluindo nome, endereço e número de telefone do tutor.*/
+SELECT P.*, T.NOME , T.ENDERECO , T.TELEFONE 
+FROM PACIENTE p 
+LEFT JOIN TUTOR t ON T.ID_TUTOR = P.ID_TUTOR 
+
+/*2 - Selecione apenas os pacientes que têm um tutor associado,
+trazendo todos os detalhes dos pacientes e dos seus tutores.*/
+SELECT P.*, T.*
+FROM PACIENTE p 
+INNER JOIN TUTOR t ON P.ID_TUTOR = T.ID_TUTOR 
+
+/*3 - Selecione todos os tutores juntamente com os detalhes dos seus pacientes,
+incluindo nome, espécie e raça do paciente.*/
+SELECT T.*, P.*, P.NOME , P.ESPECIE , P.RACA
+FROM TUTOR t 
+LEFT JOIN PACIENTE p ON P.ID_TUTOR = T.ID_TUTOR 
+
+/*4 - Selecione apenas os tutores que têm pacientes associados,
+ trazendo todos os detalhes dos tutores e dos seus pacientes.*/
+SELECT P.*, T.*
+FROM TUTOR t 
+INNER JOIN PACIENTE p ON P.ID_TUTOR = T.ID_TUTOR 
+
+/*5 - Selecione todos os medicamentos juntamente com os detalhes das suas prescrições, 
+incluindo a data da prescrição e a quantidade prescrita.*/
+SELECT M.*, R.DATA_EMISSAO , I.QUANTIDADE 
+FROM MEDICAMENTOS m 
+LEFT JOIN ITENSRECEITA i ON M.ID_MEDICAMENTO = I.ID_MEDICAMENTO 
+LEFT JOIN RECEITA r ON I.ID_RECEITA = R.ID_RECEITA 
+
+/*6 - Selecione apenas os medicamentos que foram prescritos, trazendo todos os detalhes dos 
+medicamentos e das suas prescrições.*/
+SELECT M.*, R.DATA_EMISSAO , I.QUANTIDADE 
+FROM MEDICAMENTOS m 
+INNER JOIN ITENSRECEITA i ON M.ID_MEDICAMENTO = I.ID_MEDICAMENTO 
+INNER JOIN RECEITA r ON I.ID_RECEITA = R.ID_RECEITA 
+
+/*7 - Selecione todos os registros de prescrição juntamente com os detalhes dos pacientes associados, 
+incluindo o nome e a espécie do paciente.*/
+SELECT r.DATA_EMISSAO , i.QUANTIDADE , i.DOSAGEM , p.NOME , p.ESPECIE 
+FROM RECEITA r
+LEFT JOIN AGENDAMENTO a ON a.ID_AGENDAMENTO = r.id_agendamento
+LEFT JOIN PACIENTE p ON p.ID_PACIENTE = a.ID_PACIENTE 
+LEFT JOIN ITENSRECEITA i ON r.ID_RECEITA = r.ID_RECEITA 
+
+/*8 - Selecione apenas os registros de prescrição que estão associados a um paciente, 
+trazendo todos os detalhes dos registros de prescrição e dos pacientes associados.*/
+SELECT r.DATA_EMISSAO , i.QUANTIDADE , i.DOSAGEM , p.NOME , p.ESPECIE 
+FROM RECEITA r
+INNER JOIN AGENDAMENTO a ON a.ID_AGENDAMENTO = r.id_agendamento
+INNER JOIN PACIENTE p ON p.ID_PACIENTE = a.ID_PACIENTE 
+INNER JOIN ITENSRECEITA i ON r.ID_RECEITA = r.ID_RECEITA 
